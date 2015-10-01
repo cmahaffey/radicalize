@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="Final">
+  <head>
+    <meta charset="utf-8">
+    <title>Final project</title>
+    <link rel="stylesheet" href="/css/styles.css" media="screen" title="no title" charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script type="text/javascript" src='/js/app.js'></script>
+  </head>
+  <body>
+    <section ng-controller="app-controller">
+      <h1>{{welcomeMessage}}</h1>
+      <ul>
+        <li ng-repeat="chat in chats"><p>
+          {{chat.text}}
+        </p></li>
+      </ul>
+      <form class="send-form" ng-submit="sendChat()">
+        <input type="text" ng-model="newChat.text" placeholder="message">
+        <input type="submit"  value="send">
+
+      </form>
+
+    </section>
+  </body>
+</html>
