@@ -1,22 +1,22 @@
 angular.module('Final',[]);
 
 angular.module('Final')
-       .controller('app-controller',["$scope","$http",function($scope,$http){
+       .controller('app-controller',["$scope","$http","$sce",function($scope,$http,$sce){
          $scope.welcomeMessage='Hi there, Let\'s chat'
-         $scope.chats=[
-           {text:'this is a test'},
-           {text:'and another'}
-         ];
+        //  $scope.chats=[
+        //    {text:'this is a test'},
+        //    {text:'and another'}
+        //  ];
+        $scope.makeHTML = $sce.trustAsHtml;
          $scope.socket=io();
-
-         $scope.newChat = {};
+         $scope.searchResults;
+         $scope.newSearch;
          $scope.sendChat = function(){
-           $scope.socket.emit('send message', $scope.newChat)
+           $scope.socket.emit('search request', $scope.newSearch)
          };
-         $scope.socket.on('emit message', function(message){
-           console.log(message);
-           $scope.chats.push(message);
+         $scope.socket.on('send data', function(data){
+           $scope.searchResults=data
            $scope.$digest();
          })
-
+         console.log($scope.searchResults);
 }]);

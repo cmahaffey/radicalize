@@ -12,12 +12,20 @@
     <section ng-controller="app-controller">
       <h1>{{welcomeMessage}}</h1>
       <ul>
-        <li ng-repeat="chat in chats"><p>
-          {{chat.text}}
-        </p></li>
+        <div>
+          <h3>{{searchResults.character}}</h3>
+          <p ng-show="searchResults.traditionalForm">
+            Traditional Form:
+          </p><span ng-bind-html="makeHTML(searchResults.traditionalForm)"></span>
+          <p ng-show="searchResults.simplifiedForm">Simplified Form:</p><span ng-bind-html="makeHTML(searchResults.simplifiedForm)"></span>
+
+          <h5 ng-repeat="result in searchResults.pinYin">{{result}}</h5>
+          <p>
+          {{searchResults.definition}}
+        </p></div>
       </ul>
       <form class="send-form" ng-submit="sendChat()">
-        <input type="text" ng-model="newChat.text" placeholder="message">
+        <input type="text" ng-model="newSearch" placeholder="Search">
         <input type="submit"  value="send">
 
       </form>
