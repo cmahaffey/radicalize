@@ -29,7 +29,11 @@
         <input type="submit"  value="send">
 
       </form>
-
+      <section ng-repeat="radical in radicals">
+          <div ng-click="findCharacters(radical)">
+            {{radical}}
+          </div>
+      </section>
     </section>
   </body>
 </html>

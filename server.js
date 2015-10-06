@@ -16,36 +16,99 @@ var io = socketIo(wrapperServer);
 mongoose.connect(process.env.MONGOLAB_URI||'mongodb://localhost/dengaiping')
 
 var CharacterSchema= new mongoose.Schema({
-  character: {type:String},
-  radicals: {type:Array}
+  character: {type: String},
+  radicals: {type: Array}
+});
+var RadicalSchema= new mongoose.Schema({
+  radical: {type: String},
+  strokes: {type: Number},
+  characters: {type: Array}
 });
 
-var Character = mongoose.model('Character', CharacterSchema)
+var Character = mongoose.model('Character', CharacterSchema);
+var Radical = mongoose.model('Radical', RadicalSchema);
 //need to fix this if statement
-if(Character.find({}).mongooseCollection.collection){
-  // console.log(Character.find({}));
+if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
+  // Radical.findOne({radical: 'ノ'}).then(function(shtuff){console.log(shtuff.characters)});
+  // Character.where('radicals').in(['ノ']).exec(function(err,results){
+  //   var characters = []
+  //   for (var i = 0; i < results.length; i++) {
+  //     characters.push(results[i].character);
+  //   }
+  //   console.log(characters);
+  // });
+  // Radical.find({}, function(err, results){
+  //   var radicals = []
+  //    for (var i = 0; i < results.length; i++) {
+  //      radicals.push(results[i].radical);
+  //    }
+  //    console.log(radicals.length);
+  //  });
+
+
+
 }else{
-  var char;
+  // var char;
+  var rad;
+  var radData={}
   // console.log(Character.find({}));
   console.log('successful fail');
-  // fs.readFile('./client/files/KanRad.txt','utf8',function(err,data){
-  //   if (err) {
-  //    return console.log(err);
-  //  }
-  //   for (var i = 0; i < data.match(/^(.) : (.*)$/gm).length; i++) {
-  //     char=data.match(/^(.) : (.*)$/gm)[i].match(/(.) : /m)[1];
-  //     rads=data.match(/^(.) : (.*)$/gm)[i].match(/\s:\s(.*)/g)[0].split(' ');
-  //     rads.shift(); rads.shift();
-  //     line={
-  //       character: char,
-  //       radicals: rads
-  //     };
-  //     char = new Character(line);
-  //     char.save(function(){
-  //       console.log(char);
-  //     });
-  //   }
-  // });
+  // DB populating by character
+  fs.readFile('./client/files/KanRad.txt','utf8',function(err,data){
+    if (err) {
+     return console.log(err);
+   }
+    for (var i = 0; i < data.match(/^(.) : (.*)$/gm).length; i++) {
+      char=data.match(/^(.) : (.*)$/gm)[i].match(/(.) : /m)[1];
+      rads=data.match(/^(.) : (.*)$/gm)[i].match(/\s:\s(.*)/g)[0].split(' ');
+      rads.shift(); rads.shift();
+      line={
+        character: char,
+        radicals: rads
+      };
+      char = new Character(line);
+      char.save(function(){
+        console.log(char);
+      });
+    }
+  });
+  // DB populating by radical
+
+  //commented out until i figure out the find
+
+  fs.readFile('./client/files/RadKan.txt','utf8',function(err,data){
+    if (err) {
+     return console.log(err);
+   }else{
+     data =data.split('\n$')
+     data.shift()
+
+    for (var i = 0; i < data.length; i++) {
+      radicalInfo = data[i].match(/ (.) ([1-9]{1,2})\n(.+)| (.) ([1-9]{1,2}).+\n(.+)/)
+      if (radicalInfo[1]) {
+        radical = radicalInfo[1]
+        strokeNum = radicalInfo[2]
+        allCharacters = radicalInfo[3].split('')
+      }else{
+        radical = radicalInfo[4]
+        strokeNum = radicalInfo[5]
+        allCharacters = radicalInfo[6].split('')
+      }
+
+      radData = {
+        radical: radical,
+        strokes: strokeNum,
+        characters: allCharacters
+      }
+
+      rad = new Radical(radData);
+      rad.save(function(){
+            console.log(radData);
+          });
+    }
+   }
+
+  });
 }
 
 
@@ -119,7 +182,13 @@ app.get('/', function(req,res){
 });
 
 app.get('/api/CharRads',function(req,res){
-  res.sendFile(__dirname + '/client/files/KanRad.txt')
+  Radical.find({},function(err, results){
+    var radicals = []
+     for (var i = 0; i < results.length; i++) {
+       radicals.push(results[i].radical);
+     }
+    res.json(radicals)
+  });
 });
 
 var port=process.env.PORT || '8080';
