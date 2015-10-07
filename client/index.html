@@ -24,14 +24,19 @@
           {{searchResults.definition}}
         </p></div>
       </ul>
-      <form class="send-form" ng-submit="sendChat()">
+      <div ng-repeat="char in relevantChars">
+        <div ng-click="sendChat(char)">
+          {{char}}
+        </div>
+      </div>
+      <!-- <form class="send-form" ng-submit="sendChat()">
         <input type="text" ng-model="newSearch" placeholder="Search">
         <input type="submit"  value="send">
 
-      </form>
+      </form> -->
       <section ng-repeat="radical in radicals">
-          <div ng-click="findCharacters(radical)">
-            {{radical}}
+          <div ng-click="findCharacters(radical.radical)">
+            {{radical.radical}}
           </div>
       </section>
     </section>

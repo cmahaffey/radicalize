@@ -5,8 +5,8 @@ var express    =  require('express'),
     bodyParser =  require('body-parser'),
     morgan     =  require('morgan'),
     request    =  require('request')
-    fs         =  require('fs');
-
+    fs         =  require('fs'),
+    _          =  require('underscore');
 
 
 var app = express();
@@ -30,13 +30,6 @@ var Radical = mongoose.model('Radical', RadicalSchema);
 //need to fix this if statement
 if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
   // Radical.findOne({radical: 'ノ'}).then(function(shtuff){console.log(shtuff.characters)});
-  // Character.where('radicals').in(['ノ']).exec(function(err,results){
-  //   var characters = []
-  //   for (var i = 0; i < results.length; i++) {
-  //     characters.push(results[i].character);
-  //   }
-  //   console.log(characters);
-  // });
   // Radical.find({}, function(err, results){
   //   var radicals = []
   //    for (var i = 0; i < results.length; i++) {
@@ -74,8 +67,6 @@ if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
   });
   // DB populating by radical
 
-  //commented out until i figure out the find
-
   fs.readFile('./client/files/RadKan.txt','utf8',function(err,data){
     if (err) {
      return console.log(err);
@@ -84,7 +75,7 @@ if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
      data.shift()
 
     for (var i = 0; i < data.length; i++) {
-      radicalInfo = data[i].match(/ (.) ([1-9]{1,2})\n(.+)| (.) ([1-9]{1,2}).+\n(.+)/)
+      radicalInfo = data[i].match(/ (.) ([0-9]{1,2})\n(.+)| (.) ([0-9]{1,2}).+\n(.+)/)
       if (radicalInfo[1]) {
         radical = radicalInfo[1]
         strokeNum = radicalInfo[2]
@@ -114,7 +105,43 @@ if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
 
 
 app.use(express.static(__dirname+'/client'));
+io.on('connection',function(socket, response){
+  socket.on('get characters', function(radicals){
+    console.log(radicals);
+    if (radicals.length===1){
+      Character.where('radicals').in(radicals).exec(function(err,results){
+        var characters = []
+        for (var i = 0; i < results.length; i++) {
+          characters.push(results[i].character);
+        }
+        console.log(characters);
+        io.emit('send characters', characters);
+      });
+    }else if(radicals.length>1){
+      var characters = [];
+      var compare = [];
+      for (var radIdx = 0; radIdx < radicals.length; radIdx++) {
 
+        if(radIdx===0){
+          Character.where('radicals').in([radicals[0]]).exec(function(err,results){
+            for (var i = 0; i < results.length; i++) {
+              characters.push(results[i].character);
+            }
+          });
+        }else{
+          Character.where('radicals').in([radicals[radIdx]]).exec(function(err,results){
+            for (var i = 0; i < results.length; i++) {
+              compare.push(results[i].character);
+            }
+            characters=_.intersection(characters,compare)
+          });
+        }
+      }
+      io.emit('send characters', characters);
+    }
+
+  });
+});
 io.on('connection',function(socket, response){
   console.log('connected');
   socket.on('search request', function(search){
@@ -173,22 +200,23 @@ io.on('connection',function(socket, response){
 
 app.get('/', function(req,res){
 
-
   res.sendFile(__dirname+'/client/index.html');
-
-
   console.log("get request");
 
 });
 
 app.get('/api/CharRads',function(req,res){
+  //populates an api of all radicals to populate the home page
   Radical.find({},function(err, results){
     var radicals = []
      for (var i = 0; i < results.length; i++) {
-       radicals.push(results[i].radical);
+       radicals.push(results[i]);
      }
+     radicals= radicals.sort(function(a,b){console.log(a.strokes);return a.strokes-b.strokes})
+     console.log(radicals.length);
     res.json(radicals)
   });
+
 });
 
 var port=process.env.PORT || '8080';

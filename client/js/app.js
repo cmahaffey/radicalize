@@ -8,7 +8,9 @@ angular.module('Final')
          $scope.socket=io();
          $scope.searchResults;
          $scope.newSearch;
-         $scope.sendChat = function(){
+         $scope.sendChat = function(character){
+           $scope.newSearch=character;
+           console.log('character sent:' +character);
            $scope.socket.emit('search request', $scope.newSearch)
          };
          $scope.socket.on('send data', function(data){
@@ -23,6 +25,11 @@ angular.module('Final')
         });
          $scope.findCharacters = function(radical){
            $scope.searchRads.push(radical)
+           $scope.socket.emit('get characters', $scope.searchRads)
            console.log('Radicals:'+ $scope.searchRads);
          };
+         $scope.socket.on('send characters', function(characters){
+           $scope.relevantChars=characters;
+           $scope.$digest();
+         })
 }]);
