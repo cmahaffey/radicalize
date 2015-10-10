@@ -28,7 +28,7 @@ var RadicalSchema= new mongoose.Schema({
 var Character = mongoose.model('Character', CharacterSchema);
 var Radical = mongoose.model('Radical', RadicalSchema);
 //need to fix this if statement
-if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
+if(false){
   // Radical.findOne({radical: 'ノ'}).then(function(shtuff){console.log(shtuff.characters)});
   // Radical.find({}, function(err, results){
   //   var radicals = []
