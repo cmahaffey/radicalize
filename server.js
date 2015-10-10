@@ -107,7 +107,6 @@ if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
 app.use(express.static(__dirname+'/client'));
 io.on('connection',function(socket, response){
   socket.on('get characters', function(radicals){
-    console.log(radicals);
     if (radicals.length===1){
       Character.where('radicals').in(radicals).exec(function(err,results){
         var characters = []
@@ -118,28 +117,33 @@ io.on('connection',function(socket, response){
         io.emit('send characters', characters);
       });
     }else if(radicals.length>1){
+      console.log('here');
       var characters = [];
       var compare = [];
-      for (var radIdx = 0; radIdx < radicals.length; radIdx++) {
+          Character.where('radicals').in([radicals[0]]).exec(function(err,result){
+            for (var radIdx = 0; radIdx < radicals.length; radIdx++) {
+              if(radIdx===0){
+                for (var i = 0; i < result.length; i++) {
+                  characters.push(result[i].character);
+                }
+                console.log("first chars:"+characters);
+              }else{
+                Character.where('radicals').in([radicals[radIdx]]).exec(function(err,results){
+                  for (var i = 0; i < results.length; i++) {
+                    compare.push(results[i].character);
+                  }
+                  console.log('compare:'+compare);
+                  console.log('chars:'+characters);
+                  characters=_.intersection(characters,compare);
+                  console.log('chars:'+characters);
+                  io.emit('send characters', characters)
+                });
+              }
+            }
 
-        if(radIdx===0){
-          Character.where('radicals').in([radicals[0]]).exec(function(err,results){
-            for (var i = 0; i < results.length; i++) {
-              characters.push(results[i].character);
-            }
-          });
-        }else{
-          Character.where('radicals').in([radicals[radIdx]]).exec(function(err,results){
-            for (var i = 0; i < results.length; i++) {
-              compare.push(results[i].character);
-            }
-            characters=_.intersection(characters,compare)
-          });
-        }
-      }
-      io.emit('send characters', characters);
+
+      });
     }
-
   });
 });
 io.on('connection',function(socket, response){
@@ -212,8 +216,7 @@ app.get('/api/CharRads',function(req,res){
      for (var i = 0; i < results.length; i++) {
        radicals.push(results[i]);
      }
-     radicals= radicals.sort(function(a,b){console.log(a.strokes);return a.strokes-b.strokes})
-     console.log(radicals.length);
+     radicals= radicals.sort(function(a,b){;return a.strokes-b.strokes})
     res.json(radicals)
   });
 
