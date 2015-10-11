@@ -117,9 +117,9 @@ io.on('connection',function(socket, response){
         io.emit('send characters', characters);
       });
     }else if(radicals.length>1){
-      console.log('here');
       var characters = [];
       var compare = [];
+      var newRads=[];
           Character.where('radicals').in([radicals[0]]).exec(function(err,result){
             for (var radIdx = 0; radIdx < radicals.length; radIdx++) {
               if(radIdx===0){
@@ -129,20 +129,23 @@ io.on('connection',function(socket, response){
                 console.log("first chars:"+characters);
               }else{
                 Character.where('radicals').in([radicals[radIdx]]).exec(function(err,results){
-                  for (var i = 0; i < results.length; i++) {
+
+                  (function(){for (var i = 0; i < results.length; i++) {
+                    console.log(radIdx);
+                    console.log(radicals[radIdx]);
                     compare.push(results[i].character);
-                  }
+                  }})()
                   console.log('compare:'+compare);
                   console.log('chars:'+characters);
                   characters=_.intersection(characters,compare);
                   console.log('chars:'+characters);
-                  io.emit('send characters', characters)
-                });
+
+                }).then(function(){console.log(radIdx);io.emit('send characters', characters)});;
               }
             }
 
 
-      });
+      })
     }
   });
 });
