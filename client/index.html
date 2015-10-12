@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Final project</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="/css/styles.css" media="screen" title="no title" charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -10,34 +12,39 @@
   </head>
   <body  ng-controller="app-controller">
       <h1>{{welcomeMessage}}</h1>
-      <div class="results">
-        <div class="chinese">
-          <!-- character searched -->
-          <h3>{{searchResults.character}}</h3>
-          <!-- traditional form if extant -->
-          <p class="alternate"ng-show="searchResults.traditionalForm">
-            Traditional Form:
-          </p><span class="alternate" ng-bind-html="makeHTML(searchResults.traditionalForm)"></span>
-          <!-- simplified form if extant -->
-          <p class="alternate" ng-show="searchResults.simplifiedForm">Simplified Form:</p>
-          <span class="alternate" ng-bind-html="makeHTML(searchResults.simplifiedForm)"></span>
-        </div>
-        <div class="english">
-          <h5 ng-repeat="result in searchResults.pinYin">Pin Yin: {{result}}</h5>
-          <p>
-            {{searchResults.definition}}
-          </p>
-        </div>
+
+      <div class="container">
+        <div class="results row">
+          <div class="chinese  col-sm-6">
+            <!-- character searched -->
+            <h3 class='searched'>{{searchResults.character}}</h3>
+            <!-- traditional form if extant -->
+            <p class="alternate"ng-show="searchResults.traditionalForm">
+              Traditional Form:
+            </p><span class="alternate" ng-bind-html="makeHTML(searchResults.traditionalForm)"></span>
+            <!-- simplified form if extant -->
+            <p class="alternate" ng-show="searchResults.simplifiedForm">Simplified Form:</p>
+            <span class="alternate" ng-bind-html="makeHTML(searchResults.simplifiedForm)"></span>
+          </div>
 
 
-      </div>
+
+            <div class="english col-sm-6">
+              <h4 ng-repeat="result in searchResults.pinYin">Pin Yin: {{result}}
+                 <br>Definition: <br>
+                 {{searchResults.definition}}
+               </h4>
+            </div>
+          </div>
+        </div>
       <br>
-      <div ng-repeat="char in relevantChars">
+      <div class=character ng-repeat="char in relevantChars">
         <!-- rename -->
-        <div ng-click="sendChat(char)">
+        <div class="character"ng-click="sendChat(char)">
           {{char}}
         </div>
       </div>
+
       <!-- <form class="send-form" ng-submit="sendChat()">
         <input type="text" ng-model="newSearch" placeholder="Search">
         <input type="submit"  value="send">
@@ -49,7 +56,7 @@
           1
       </div>
        <section ng-if="radical.strokes===1" ng-repeat="radical in radicals">
-         <div ng-click= "findCharacters(radical.radical, $event)">
+         <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -57,7 +64,7 @@
           2
       </div>
        <section ng-if="radical.strokes===2" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -65,7 +72,7 @@
         3
       </div>
       <section ng-if="radical.strokes===3" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -73,7 +80,7 @@
         4
       </div>
       <section ng-if="radical.strokes===4" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -81,7 +88,7 @@
         5
       </div>
        <section  ng-if="radical.strokes===5" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -89,7 +96,7 @@
         6
       </div>
       <section ng-if="radical.strokes===6" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -97,7 +104,7 @@
         7
       </div>
       <section ng-if="radical.strokes===7" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -105,7 +112,7 @@
         8
       </div>
       <section ng-if="radical.strokes===8" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -113,7 +120,7 @@
         9
       </div>
       <section ng-if="radical.strokes===9" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -121,7 +128,7 @@
         10
       </div>
        <section ng-if="radical.strokes===10" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -129,7 +136,7 @@
         11
       </div>
        <section ng-if="radical.strokes===11" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -137,7 +144,7 @@
         12
       </div>
       <section ng-if="radical.strokes===12" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -145,7 +152,7 @@
         13
       </div>
        <section ng-if="radical.strokes===13" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
       </section>
@@ -153,7 +160,7 @@
         14
       </div>
       <section ng-if="radical.strokes===14" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>
@@ -161,7 +168,7 @@
         17
       </div>
        <section ng-if="radical.strokes===17" ng-repeat="radical in radicals">
-           <div ng-click= "findCharacters(radical.radical, $event)">
+           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
                 {{radical.radical}}
             </div>
         </section>

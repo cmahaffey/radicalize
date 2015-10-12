@@ -24,13 +24,14 @@ angular.module('Final')
           $scope.radicals = response.data;
         });
          $scope.findCharacters = function(radical, e){
-           if(e.target.className==="ng-binding"){
+           console.log(e.target.className);
+           if(e.target.className==="radical ng-binding"){
              e.target.className=e.target.className+" clicked"
              $scope.searchRads.push(radical)
              $scope.socket.emit('get characters', $scope.searchRads)
              console.log('Radicals:'+ $scope.searchRads);
            }else{
-             e.target.className="ng-binding"
+             e.target.className="radical ng-binding"
              for (var i = 0; i < $scope.searchRads.length; i++) {
                if ($scope.searchRads[i]===e.target.textContent.trim()) {
                  $scope.searchRads.splice(i,1);

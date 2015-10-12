@@ -163,12 +163,17 @@ io.on('connection',function(socket, response){
           pinYin: null,
           definition: null
         };
+
         if(body.match(/font size="7">(.)</)){
             data.character= body.match(/font size="7">(.)</)[1];
         }else{
           console.log(body);
         }
-        data.definition= body.match(/kDefinition.*\n.*\n.*\n.*>(.*)</)[1];
+        if (body.match(/kDefinition.*\n.*\n.*\n.*>(.*)</)) {
+          data.definition= body.match(/kDefinition.*\n.*\n.*\n.*>(.*)</)[1];
+        }else{
+          data.definition= "Definition not found"
+        }
 
         if (body.match(/kSimplifiedVariant.*\n.*\n.*\n.*(\&.*;)</)){
           data.simplifiedForm= body.match(/kSimplifiedVariant.*\n.*\n.*\n.*(\&.*;)</)[1];
@@ -189,6 +194,8 @@ io.on('connection',function(socket, response){
         }else if (body.match(/kXHC1983.*\n.*\n.*\n.*:(.*)</)) {
           data.pinYin= body.match(/kXHC1983.*\n.*\n.*\n.*:(.*)</)[1].split(', ');
 
+        }else{
+          data.pinYin= 'n/a'
         }
         console.log(data); //why does this log the whole fucking input
         // data=JSON.parse(body)
