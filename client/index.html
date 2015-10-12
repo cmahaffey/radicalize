@@ -14,8 +14,8 @@
       <h1>{{welcomeMessage}}</h1>
 
       <div class="container">
-        <div class="results row">
-          <div class="chinese  col-sm-6">
+        <div class="results row-fluid">
+          <div class="chinese  span5">
             <!-- character searched -->
             <h3 class='searched'>{{searchResults.character}}</h3>
             <!-- traditional form if extant -->
@@ -29,7 +29,7 @@
 
 
 
-            <div class="english col-sm-6">
+            <div class="english span6 offset1">
               <h4 ng-repeat="result in searchResults.pinYin">Pin Yin: {{result}}
                  <br>Definition: <br>
                  {{searchResults.definition}}
@@ -38,142 +38,189 @@
           </div>
         </div>
       <br>
-      <div class=character ng-repeat="char in relevantChars">
-        <!-- rename -->
-        <div class="character"ng-click="sendChat(char)">
-          {{char}}
+      <div class="characters" ng-show=relevantChars>
+        <div class="character" ng-repeat="char in relevantChars">
+          <!-- rename -->
+          <div class="character"ng-click="sendChat(char)">
+            {{char}}
+          </div>
         </div>
       </div>
+
+
+
 
       <!-- <form class="send-form" ng-submit="sendChat()">
         <input type="text" ng-model="newSearch" placeholder="Search">
         <input type="submit"  value="send">
 
       </form> -->
-      <br><br><br>
+      <br>
       <!-- can be fixed by refactoring the database -->
-      <div class="strokes first">
+      <div class="strokes first" ng-click="showStrokes1=!showStrokes1">
           1
       </div>
-       <section ng-if="radical.strokes===1" ng-repeat="radical in radicals">
-         <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes1>
+        <section ng-if="radical.strokes===1" ng-repeat="radical in radicals">
+          <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                 {{radical.radical}}
+             </div>
+         </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes2=!showStrokes2">
           2
       </div>
-       <section ng-if="radical.strokes===2" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes2>
+        <section ng-if="radical.strokes===2" ng-repeat="radical in radicals">
+            <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                 {{radical.radical}}
+             </div>
+         </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes3=!showStrokes3">
         3
       </div>
-      <section ng-if="radical.strokes===3" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes3>
+        <section ng-if="radical.strokes===3" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes4=!showStrokes4">
         4
       </div>
-      <section ng-if="radical.strokes===4" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes4>
+        <section ng-if="radical.strokes===4" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes5=!showStrokes5">
         5
       </div>
-       <section  ng-if="radical.strokes===5" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes5>
+        <section  ng-if="radical.strokes===5" ng-repeat="radical in radicals">
+            <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                 {{radical.radical}}
+             </div>
+         </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes6=!showStrokes6">
         6
       </div>
-      <section ng-if="radical.strokes===6" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes6>
+        <section ng-if="radical.strokes===6" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes7=!showStrokes7">
         7
       </div>
-      <section ng-if="radical.strokes===7" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes7>
+        <section ng-if="radical.strokes===7" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes8=!showStrokes8">
         8
       </div>
-      <section ng-if="radical.strokes===8" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes8>
+        <section ng-if="radical.strokes===8" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes9=!showStrokes9">
         9
       </div>
-      <section ng-if="radical.strokes===9" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes9>
+        <section ng-if="radical.strokes===9" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes10=!showStrokes10">
         10
       </div>
-       <section ng-if="radical.strokes===10" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes10>
+        <section ng-if="radical.strokes===10" ng-repeat="radical in radicals">
+            <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                 {{radical.radical}}
+             </div>
+         </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes11=!showStrokes11">
         11
       </div>
-       <section ng-if="radical.strokes===11" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes11>
+        <section ng-if="radical.strokes===11" ng-repeat="radical in radicals">
+            <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                 {{radical.radical}}
+             </div>
+         </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes12=!showStrokes12">
         12
       </div>
-      <section ng-if="radical.strokes===12" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes12>
+        <section ng-if="radical.strokes===12" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes13=!showStrokes13">
         13
       </div>
-       <section ng-if="radical.strokes===13" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-      </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes13>
+        <section ng-if="radical.strokes===13" ng-repeat="radical in radicals">
+            <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                 {{radical.radical}}
+             </div>
+        </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes14=!showStrokes14">
         14
       </div>
-      <section ng-if="radical.strokes===14" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-      <div class="strokes">
+      <div class="stroke-row"ng-show=showStrokes14>
+        <section ng-if="radical.strokes===14" ng-repeat="radical in radicals">
+             <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                  {{radical.radical}}
+              </div>
+          </section>
+      </div>
+
+      <div class="strokes" ng-click="showStrokes17=!showStrokes17">
         17
       </div>
-       <section ng-if="radical.strokes===17" ng-repeat="radical in radicals">
-           <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
-                {{radical.radical}}
-            </div>
-        </section>
-
-
+      <div class="stroke-row"ng-show=showStrokes17>
+        <section ng-if="radical.strokes===17" ng-repeat="radical in radicals">
+            <div class="radical" ng-click= "findCharacters(radical.radical, $event)">
+                 {{radical.radical}}
+             </div>
+         </section>
+      </div>
 
   </body>
 </html>
