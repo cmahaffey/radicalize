@@ -28,81 +28,91 @@ var RadicalSchema= new mongoose.Schema({
 var Character = mongoose.model('Character', CharacterSchema);
 var Radical = mongoose.model('Radical', RadicalSchema);
 //need to fix this if statement
-if(false){
-  // Radical.findOne({radical: 'ノ'}).then(function(shtuff){console.log(shtuff.characters)});
-  // Radical.find({}, function(err, results){
-  //   var radicals = []
-  //    for (var i = 0; i < results.length; i++) {
-  //      radicals.push(results[i].radical);
-  //    }
-  //    console.log(radicals.length);
-  //  });
+Character.count({}, function(err, count){
+  if(count===0){
+    // DB populating by character
+    fs.readFile('./client/files/KanRad.txt','utf8',function(err,data){
+      if (err) {
+       return console.log(err);
+     }
+      for (var i = 0; i < data.match(/^(.) : (.*)$/gm).length; i++) {
+        char=data.match(/^(.) : (.*)$/gm)[i].match(/(.) : /m)[1];
+        rads=data.match(/^(.) : (.*)$/gm)[i].match(/\s:\s(.*)/g)[0].split(' ');
+        rads.shift(); rads.shift();
+        line={
+          character: char,
+          radicals: rads
+        };
+        char = new Character(line);
+        char.save(function(){
+          console.log(char);
+        });
+      }
+    });
+  }
+});
 
-
-
-}else{
-  // var char;
+Radical.count({}, function(err, count){
   var rad;
   var radData={}
-  // console.log(Character.find({}));
-  Character.remove({});
-  Radical.remove(function(err,remove){});
-  console.log('successful fail');
-  // DB populating by character
-  fs.readFile('./client/files/KanRad.txt','utf8',function(err,data){
-    if (err) {
-     return console.log(err);
-   }
-    for (var i = 0; i < data.match(/^(.) : (.*)$/gm).length; i++) {
-      char=data.match(/^(.) : (.*)$/gm)[i].match(/(.) : /m)[1];
-      rads=data.match(/^(.) : (.*)$/gm)[i].match(/\s:\s(.*)/g)[0].split(' ');
-      rads.shift(); rads.shift();
-      line={
-        character: char,
-        radicals: rads
-      };
-      char = new Character(line);
-      char.save(function(){
-        console.log(char);
-      });
-    }
-  });
-  // DB populating by radical
+  if(count===0){
+    fs.readFile('./client/files/RadKan.txt','utf8',function(err,data){
+      if (err) {
+       return console.log(err);
+     }else{
+       data =data.split('\n$')
+       data.shift()
 
-  fs.readFile('./client/files/RadKan.txt','utf8',function(err,data){
-    if (err) {
-     return console.log(err);
-   }else{
-     data =data.split('\n$')
-     data.shift()
+      for (var i = 0; i < data.length; i++) {
+        radicalInfo = data[i].match(/ (.) ([0-9]{1,2})\n(.+)| (.) ([0-9]{1,2}).+\n(.+)/)
+        if (radicalInfo[1]) {
+          radical = radicalInfo[1]
+          strokeNum = radicalInfo[2]
+          allCharacters = radicalInfo[3].split('')
+        }else{
+          radical = radicalInfo[4]
+          strokeNum = radicalInfo[5]
+          allCharacters = radicalInfo[6].split('')
+        }
 
-    for (var i = 0; i < data.length; i++) {
-      radicalInfo = data[i].match(/ (.) ([0-9]{1,2})\n(.+)| (.) ([0-9]{1,2}).+\n(.+)/)
-      if (radicalInfo[1]) {
-        radical = radicalInfo[1]
-        strokeNum = radicalInfo[2]
-        allCharacters = radicalInfo[3].split('')
-      }else{
-        radical = radicalInfo[4]
-        strokeNum = radicalInfo[5]
-        allCharacters = radicalInfo[6].split('')
+        radData = {
+          radical: radical,
+          strokes: strokeNum,
+          characters: allCharacters
+        }
+
+        rad = new Radical(radData);
+        rad.save(function(){
+              console.log(radData);
+            });
       }
+     }
 
-      radData = {
-        radical: radical,
-        strokes: strokeNum,
-        characters: allCharacters
-      }
-
-      rad = new Radical(radData);
-      rad.save(function(){
-            console.log(radData);
-          });
-    }
-   }
-
-  });
-}
+    });
+  }
+});
+// if(false){
+//   // Radical.findOne({radical: 'ノ'}).then(function(shtuff){console.log(shtuff.characters)});
+//   // Radical.find({}, function(err, results){
+//   //   var radicals = []
+//   //    for (var i = 0; i < results.length; i++) {
+//   //      radicals.push(results[i].radical);
+//   //    }
+//   //    console.log(radicals.length);
+//   //  });
+//
+//
+//
+// }else{
+//   // var char;
+//
+//   // console.log(Character.find({}));
+//   console.log('successful fail');
+//
+//   // DB populating by radical
+//
+//
+// }
 
 
 
