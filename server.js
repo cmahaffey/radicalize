@@ -28,7 +28,7 @@ var RadicalSchema= new mongoose.Schema({
 var Character = mongoose.model('Character', CharacterSchema);
 var Radical = mongoose.model('Radical', RadicalSchema);
 //need to fix this if statement
-if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
+if(false){
   // Radical.findOne({radical: 'ノ'}).then(function(shtuff){console.log(shtuff.characters)});
   // Radical.find({}, function(err, results){
   //   var radicals = []
@@ -45,6 +45,8 @@ if(Radical.find({radical: 'ノ'})&&(Character.find({character: '娃'}))){
   var rad;
   var radData={}
   // console.log(Character.find({}));
+  Character.remove({});
+  Radical.remove({});
   console.log('successful fail');
   // DB populating by character
   fs.readFile('./client/files/KanRad.txt','utf8',function(err,data){
@@ -131,7 +133,6 @@ io.on('connection',function(socket, response){
                 Character.where('radicals').in([radicals[radIdx]]).exec(function(err,results){
 
                   (function(){for (var i = 0; i < results.length; i++) {
-                    console.log(radIdx);
                     console.log(radicals[radIdx]);
                     compare.push(results[i].character);
                   }})()
@@ -218,6 +219,9 @@ app.get('/', function(req,res){
   console.log("get request");
 
 });
+app.get('/faq', function(req,res){
+  res.sendFile(__dirname+'/client/faq.html')
+})
 
 app.get('/api/CharRads',function(req,res){
   //populates an api of all radicals to populate the home page
