@@ -46,7 +46,7 @@ if(false){
   var radData={}
   // console.log(Character.find({}));
   Character.remove({});
-  Radical.remove({});
+  Radical.remove(function(err,remove){});
   console.log('successful fail');
   // DB populating by character
   fs.readFile('./client/files/KanRad.txt','utf8',function(err,data){
