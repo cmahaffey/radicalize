@@ -143,6 +143,7 @@ io.on('connection',function(socket, response){
                 Character.where('radicals').in([radicals[radIdx]]).exec(function(err,results){
 
                   (function(){for (var i = 0; i < results.length; i++) {
+                    var radicalSearched= radicals[radIdx]
                     console.log(radicals[radIdx]);
                     compare.push(results[i].character);
                   }})()
